@@ -1,0 +1,22 @@
+
+.view {
+  position: fixed;
+  top: 5rem;
+  left:0;
+  right: 0;
+  bottom: 0;
+}
+
+.map-container-section {
+  overflow:hidden;
+  padding-bottom:56.25%;
+  position:relative;
+  height:0;
+}
+.map-container-section iframe {
+  left:0;
+  top:0;
+  height:100%;
+  width:100%;
+  position:absolute;
+}
