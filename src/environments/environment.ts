@@ -5,7 +5,7 @@
 import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angular-6-social-login';
 
 export const environment = {
-  production: false
+  production: false            // 환경변수 설정
 };
 
 export function getAuthServiceConfigs() {
