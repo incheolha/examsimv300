@@ -1,17 +1,19 @@
+import { Injectable, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { GlobalConstantShare } from '../Utility-shared/globalConstantShare';
 
-import { PaidToeflList } from './model/paidToeflLists.model';
-import { Injectable, OnInit } from '@angular/core';
-import { Http, Response, Headers} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
-import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+
 import { Shoppingcart } from './model/shoppingcart.model';
+import { PaidToeflList } from './model/paidToeflLists.model';
+import { User } from '../auth/user.model';
 
 import { AuthService_Local } from '../auth/auth.service';
 import { UtilityService } from '../Utility-shared/utility.service';
-import { Subscription } from 'rxjs/Subscription';
-import { User } from '../auth/user.model';
+
 @Injectable()
 
 export class ShoppingcartService {
@@ -33,7 +35,7 @@ export class ShoppingcartService {
     userInfoSubscription: Subscription;
 
     constructor (
-        private http: Http,
+        private http: HttpClient,
         private router: Router,
         private authService: AuthService_Local,
         private utilityService: UtilityService) {}
@@ -114,22 +116,19 @@ connectAuthShoppingCart() {
 
       goSave() {
         const token = localStorage.getItem('token');
-        const body = JSON.stringify(this.shoppingCartLists);
 
-        const header = new Headers({'Content-type': 'application/json'});
+        this.http.post< { message: string, result: Shoppingcart[] } >
+                    (this.urlConfig + '/shoppingcart/' + '?token=' + token, this.shoppingCartLists)
+                    .subscribe(
+                              data => {
 
-        this.http.post(this.urlConfig + '/shoppingcart/' + '?token=' + token, body, {headers: header})
-                 .subscribe(
-                              (res: Response) => {
-                                  console.log(res);
-                                  const data = res.json();
                                   console.log(data.result);
                                   this.shoppingCartLists = [];
                                   this.shoppingCartLists = data.result;
                                   this.shoppingCartListAdded.next(this.shoppingCartLists);   // shopping cart 추가후 변화한 값 적용하기
                               },
                               (error) => console.log(error)
-                          );
+                    );
 
       }
 }

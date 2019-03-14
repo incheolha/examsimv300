@@ -1,14 +1,17 @@
-import { PaidToeflList } from './../model/paidToeflLists.model';
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
-import { StripeModel } from '../model/stripeModel';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { Shoppingcart } from '../model/shoppingcart.model';
+import { HttpClient } from '@angular/common/http';
+
+import { GlobalConstantShare } from '../../Utility-shared/globalConstantShare';
+
 import { UtilityService } from '../../Utility-shared/utility.service';
 import { ShoppingcartService } from '../shoppingcart.service';
-import { Router } from '@angular/router';
-import { GlobalConstantShare } from '../../Utility-shared/globalConstantShare';
-import { AuthService_Local } from '../../auth/auth.service';
+
+import { PaidToeflList } from './../model/paidToeflLists.model';
+import { StripeModel } from '../model/stripeModel';
+import { Shoppingcart } from '../model/shoppingcart.model';
+import { User } from './../../auth/user.model';
 
 @Injectable()
 export class StripePaymentService {
@@ -17,29 +20,27 @@ export class StripePaymentService {
 
   shoppingCartLists = new Subject<Shoppingcart[]>();
   paidToeflLists = new Subject<PaidToeflList[]>();
-    constructor(private http: Http,
+
+    constructor(private http: HttpClient,
                 private router: Router,
-                private authService: AuthService_Local,
                 private shoppingCartService: ShoppingcartService,
                 private utilityService: UtilityService) {}
 
   gotoStripeCharge(stripeCardInfo: StripeModel) {
-        const body = JSON.stringify(stripeCardInfo);
-        const header = new Headers({'Content-Type': 'application/json'});
 
-      return this.http.post(this.urlConfig + '/stripepayment', body, {headers: header})
-            .subscribe((res: Response) => {
-                const data = res.json();
+      return this.http.post<{ message: string, paidToeflLists: PaidToeflList[], shoppingCartLists: Shoppingcart[], stripeUserInfo: User}>
+                          (this.urlConfig + '/stripepayment', stripeCardInfo)
+                          .subscribe(data => {
 
-                this.utilityService.successToast('결제가 성공적으로 완료되었습니다. 감사합니다', '결제 공지사항');
-                const reInitSuccess = this.shoppingCartService.reInitialShoppingCartLists(data.paidToeflLists, data.stripeUserInfo);
-                if (reInitSuccess) {
-                  this.router.navigate(['/']);
-                }
+                              this.utilityService.successToast('결제가 성공적으로 완료되었습니다. 감사합니다', '결제 공지사항');
+                              const reInitSuccess = this.shoppingCartService.reInitialShoppingCartLists(data.paidToeflLists, data.stripeUserInfo);
+                              if (reInitSuccess) {
+                                this.router.navigate(['/']);
+                              }
 
-            },
-            (error) => console.error(error)
-          );
+                          },
+                          (error) => console.error(error)
+                          );
 
     }
 }

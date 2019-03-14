@@ -47,12 +47,7 @@ export class AuthService_Local {
         this.http.post
                       <{ message: string,
                           token: string,
-                          user: User
-                          // userName: string,
-                          // permissionTag: string,
-                          // shoppingCartLists: Shoppingcart[],
-                          // paidToeflLists: PaidToeflList[]
-                        }>
+                          user: User }>
                         (this.urlConfig + '/user/signup', user)
 
                         .subscribe((result) => {
@@ -75,12 +70,7 @@ export class AuthService_Local {
         this.http.post
                       <{ message: string,
                           token: string,
-                          user: User
-                          // userName: string,
-                          // permissionTag: string,
-                          // shoppingCartLists: Shoppingcart[],
-                          // paidToeflLists: PaidToeflList[]
-                        }>
+                          user: User }>
                         (this.urlConfig + '/user/login', user)
 
                         .subscribe((result) => {
@@ -104,12 +94,7 @@ export class AuthService_Local {
     this.http.post
                   <{ message: string,
                       token: string,
-                      user: User
-                      // userName: string,
-                      // permissionTag: string,
-                      // shoppingCartLists: Shoppingcart[],
-                      // paidToeflLists: PaidToeflList[]
-                    }>
+                      user: User }>
                     (this.urlConfig + '/user/sociaLogin', user)
 
                     .subscribe((result) => {
