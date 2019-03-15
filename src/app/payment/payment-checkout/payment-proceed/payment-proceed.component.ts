@@ -31,25 +31,28 @@ export class PaymentProceedComponent implements OnInit {
 
   // Stripe payment를 위한 변수선언.
 
-  stripeInfo: StripeModel;
-  cardNumber: StripeElement;
-  cardExpiry: StripeElement;
-  cardCvc: StripeElement;
-  card: StripeElement;
-  elements: Elements;
+        stripeInfo: StripeModel;
+        cardNumber: StripeElement;
+        cardExpiry: StripeElement;
+        cardCvc: StripeElement;
+        card: StripeElement;
+        elements: Elements;
 
-  elementOptions: ElementsOptions = {
-    locale: 'auto'
-  };
+        elementOptions: ElementsOptions = {
+          locale: 'auto'
+        };
 
   // credit card information input form for stripe
 
-  stripeForm: FormGroup;
+      stripeForm: FormGroup;
 
-  stripeCheckbox = false;
-  stripeisActive = false;
-  paypalCheckbox = false;
-  paypalisActive = false;
+  // checkbox 변수선언
+      stripeCheckbox = false;
+      stripeisActive = false;
+      paypalCheckbox = false;
+      paypalisActive = false;
+      iamportCheckbox = false;
+      iamportisActive = false;
 
   constructor(private fb: FormBuilder,
               private router: Router,
@@ -69,34 +72,73 @@ export class PaymentProceedComponent implements OnInit {
           this.shoppingCartLists = this.shoppingcartService.getShoppingCartLists();
                                                             });
 
-    this.stripeForm = this.fb.group({
-      cardHolderName: ['', [Validators.required]],
-      cardHolderEmail: ['', [Validators.required]],
-      cardHolderZip: ['', [Validators.required]]
-    });
+          this.stripeForm = this.fb.group({
+                                            cardHolderName: ['', [Validators.required]],
+                                            cardHolderEmail: ['', [Validators.required]],
+                                            cardHolderZip: ['', [Validators.required]]
+                                          });
 
-    this.stripeService.elements(this.elementOptions)
-               .subscribe(elements => {
-                 this.elements = elements;
-                            if (!this.cardNumber) {
-                              this.cardNumber = this.elements.create('cardNumber', {});
+          this.stripeService.elements(this.elementOptions)
+                     .subscribe(elements => {
+                                             this.elements = elements;
+                                                        if (!this.cardNumber) {
+                                                          this.cardNumber = this.elements.create('cardNumber', {});
 
-                              this.cardNumber.mount('#card-number');
-                            }
+                                                          this.cardNumber.mount('#card-number');
+                                                        }
 
-                            if (!this.cardExpiry) {
-                              this.cardExpiry = this.elements.create('cardExpiry', {});
-                              this.cardExpiry.mount('#card-expiry');
-                            }
+                                                        if (!this.cardExpiry) {
+                                                          this.cardExpiry = this.elements.create('cardExpiry', {});
+                                                          this.cardExpiry.mount('#card-expiry');
+                                                        }
 
-                            if (!this.cardCvc) {
-                              this.cardCvc = this.elements.create('cardCvc', {});
-                              this.cardCvc.mount('#card-cvc');
-                            }
-                });
+                                                        if (!this.cardCvc) {
+                                                          this.cardCvc = this.elements.create('cardCvc', {});
+                                                          this.cardCvc.mount('#card-cvc');
+                                                        }
+                                            });
 
   }
 
+
+// iamport, strip, paypal checkbox중 둘중 하나에 사용자가 쳌크를 하였을경우 작동
+
+activeIamport() {
+  console.log(this.iamportCheckbox);
+
+                      if (this.iamportCheckbox) {
+                        this.iamportisActive = false;
+                        this.iamportCheckbox = false;
+                      } else if (!this.stripeCheckbox) {
+                        this.iamportCheckbox = true;
+                        this.iamportisActive = true;
+                      }
+
+ }
+
+  activeStripe() {
+    console.log(this.stripeCheckbox);
+
+                        if (this.stripeCheckbox) {
+                          this.stripeisActive = false;
+                          this.stripeCheckbox = false;
+                        } else if (!this.stripeCheckbox) {
+                          this.stripeCheckbox = true;
+                          this.stripeisActive = true;
+                        }
+
+   }
+
+   activePaypal() {
+     console.log(this.paypalCheckbox);
+                         if (this.paypalCheckbox) {
+                           this.paypalCheckbox = false;
+                           this.paypalisActive = false;
+                         } else if (!this.paypalCheckbox) {
+                           this.paypalCheckbox = true;
+                           this.paypalisActive = true;
+                         }
+   }
   onStripeSubmit() {
 
     this.stripeService
@@ -129,28 +171,5 @@ export class PaymentProceedComponent implements OnInit {
     this.paypalPaymentService.checkoutPaypal(this.payment);
   }
 
-
-  activeStripe() {
-   console.log(this.stripeCheckbox);
-             if (this.stripeCheckbox) {
-               this.stripeisActive = false;
-               this.stripeCheckbox = false;
-             } else if (!this.stripeCheckbox) {
-               this.stripeCheckbox = true;
-               this.stripeisActive = true;
-             }
-
-  }
-
-  activePaypal() {
-    console.log(this.paypalCheckbox);
-              if (this.paypalCheckbox) {
-                this.paypalCheckbox = false;
-                this.paypalisActive = false;
-              } else if (!this.paypalCheckbox) {
-                this.paypalCheckbox = true;
-                this.paypalisActive = true;
-              }
-            }
 }
 

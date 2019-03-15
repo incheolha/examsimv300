@@ -24,8 +24,18 @@
               "src/assets/audio",
               "src/assets/img"
             ],
-            "styles": [{
-              "input": "node_modules/font-awesome/scss/font-awesome.scss"
+            "styles": [
+            {
+              "input": "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss"
+            },
+            {
+              "input": "node_modules/@fortawesome/fontawesome-free/scss/solid.scss"
+            },
+            {
+              "input": "node_modules/@fortawesome/fontawesome-free/scss/regular.scss"
+            },
+            {
+              "input": "node_modules/@fortawesome/fontawesome-free/scss/brands.scss"
             },
             {
               "input": "node_modules/ng-uikit-pro-standard/assets/scss/bootstrap/bootstrap.scss"
@@ -35,6 +45,9 @@
             },
             {
               "input": "node_modules/ngx-toastr/toastr.css"
+            },
+            {
+              "input": "node_modules/bootstrap/scss/bootstrap.scss"
             },
             {
               "input": "src/styles.scss"
@@ -51,6 +64,9 @@
             },
             {
               "input": "node_modules/hammerjs/hammer.min.js"
+            },
+            {
+              "input": "node_modules/jquery/dist/jquery.js"
             }
           ]
           },

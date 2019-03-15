@@ -38,10 +38,10 @@ import { AuthGuard } from './auth/auth.guard';
 const APP_ROUTES: Routes = [
    { path: '', redirectTo: '/home', pathMatch: 'full'},
    { path: 'home', component: WelcomeComponent  },
-   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard], children: [
+   { path: 'payment', component: PaymentComponent, children: [
                       {path: 'shoppingcart', component: ShoppingcartComponent, canActivate: [AuthGuard]},
                       {path: 'checkout/:totalAmount', component: PaymentProceedComponent, canActivate: [AuthGuard]},
-                      {path: 'result', component: PaymentNotificationComponent, canActivate: [AuthGuard]}
+                      {path: 'result', component: PaymentNotificationComponent}
                   ]
    },
    { path: 'teacher', loadChildren: './toefl/teacher/teacher.module#ToeflTeacherModule'},
